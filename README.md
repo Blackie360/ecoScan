@@ -36,7 +36,7 @@ To set up and run **ecoScan** locally, follow these steps:
 
 3. Start the development server:
    ```bash
-   npm start
+   npm run dev
    ```
 
 ## Usage
