@@ -4,7 +4,13 @@
 # ecoScan 🌱
 
 **ecoScan** is an AI-powered application designed to assist with waste classification. By leveraging advanced machine learning models, users can easily classify waste types using their device's camera or by uploading images from their gallery. This tool aims to promote sustainability and proper waste management by making waste classification accessible to everyone.
-![image](https://github.com/user-attachments/assets/5ddc8ade-c793-4a31-b765-24ef75198c0f)
+
+
+
+
+
+![screenshot](https://github.com/user-attachments/assets/5ddc8ade-c793-4a31-b765-24ef75198c0f)  ![image](https://github.com/user-attachments/assets/f119cae8-b14e-47eb-9f78-ed02d7196df0)  ![image](https://github.com/user-attachments/assets/04d3cd01-f487-42d0-acaf-23c7906b9671)
+
 
 
 ## Features
