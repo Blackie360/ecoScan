@@ -14,6 +14,7 @@ import PointsInfo from "@/components/points-info"
 import { classifyWaste } from "@/lib/waste-classifier"
 import { addPoints, isFirstScanOfDay, POINTS_VALUES } from "@/lib/points-service"
 import FileUpload from "@/components/file-upload"
+import SocialShare from "@/components/social-share" // Import the social share component
 
 type WasteType = "plastic" | "paper" | "glass" | "metal" | "organic" | "electronic" | "hazardous" | "unknown"
 
@@ -243,6 +244,12 @@ export default function ScanPage() {
                       ? " This item can be recycled, saving resources and energy!"
                       : " Even non-recyclable items need proper disposal to minimize environmental harm."}
                   </p>
+                  <div className="mt-4 flex justify-end">
+                    <SocialShare
+                      title={`I identified ${classificationResult.type} waste with EcoScan!`}
+                      description={`${classificationResult.recyclable ? "This item is recyclable" : "This item is not recyclable"}. ${classificationResult.disposalInstructions}`}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             )}

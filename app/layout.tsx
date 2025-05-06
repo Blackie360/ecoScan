@@ -9,7 +9,51 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "EcoScan - Waste Classification App",
-  description: "Classify waste items using AI",
+  description: "Classify waste items using AI, learn proper disposal methods, and earn points for sustainable choices",
+  metadataBase: new URL("https://ecoscanv1.vercel.app"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ecoscanv1.vercel.app",
+    title: "EcoScan - Waste Classification with AI",
+    description: "Identify waste items, learn recycling information, and earn points for sustainable choices",
+    siteName: "EcoScan",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "EcoScan - Waste Classification with AI",
+      },
+      {
+        url: "/whatsapp-image",
+        width: 800,
+        height: 800,
+        alt: "EcoScan - Waste Classification with AI",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EcoScan - Waste Classification with AI",
+    description: "Identify waste items, learn recycling information, and earn points for sustainable choices",
+    images: ["/opengraph-image"],
+    creator: "@ecoscan",
+  },
+  // WhatsApp uses OpenGraph tags, but we'll ensure our description is concise
+  // and the image is properly sized for mobile viewing
+  other: {
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:alt": "EcoScan - Waste Classification with AI",
+    // WhatsApp sometimes uses the following for app installs
+    "al:android:url": "https://ecoscanv1.vercel.app",
+    "al:android:app_name": "EcoScan",
+    "al:android:package": "com.ecoscan.app",
+    "al:ios:url": "https://ecoscanv1.vercel.app",
+    "al:ios:app_name": "EcoScan",
+    "al:web:url": "https://ecoscanv1.vercel.app",
+  },
     generator: 'v0.dev'
 }
 
