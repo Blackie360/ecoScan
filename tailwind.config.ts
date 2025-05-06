@@ -53,6 +53,20 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Custom colors
+        darkGreen: {
+          50: "#f0f9f1",
+          100: "#dcf0de",
+          200: "#bae0bf",
+          300: "#8ec996",
+          400: "#5eac6c",
+          500: "#3d8c4e",
+          600: "#2d703c",
+          700: "#255a32",
+          800: "#21482b",
+          900: "#1c3c25",
+          950: "#0f2115",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
