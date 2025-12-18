@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { MapPin, Loader2 } from "lucide-react"
+import { MapPin } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useLocation } from "@/hooks/use-location"
 import { reverseGeocode } from "@/lib/location-service"
@@ -48,7 +49,7 @@ export default function LocationDisplay({
       <Card className={className}>
         <CardContent className="flex items-center justify-center p-6">
           <div className="flex flex-col items-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+            <Spinner className="h-8 w-8 text-primary mb-2" />
             <p className="text-sm text-muted-foreground">Getting your location...</p>
           </div>
         </CardContent>
@@ -102,7 +103,7 @@ export default function LocationDisplay({
             <p className="font-medium">Address:</p>
             {isLoadingAddress ? (
               <div className="flex items-center mt-1">
-                <Loader2 className="h-3 w-3 animate-spin mr-2" />
+                <Spinner className="h-3 w-3 mr-2" />
                 <span className="text-muted-foreground">Loading address...</span>
               </div>
             ) : address ? (

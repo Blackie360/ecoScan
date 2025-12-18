@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Award, TrendingUp, Calendar, BarChart2, Recycle } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -169,13 +170,17 @@ export default function PointsPage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <Award className="h-12 w-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-medium">No transactions yet</h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Start scanning waste items to earn points and build your history
-                      </p>
-                    </div>
+                    <Empty>
+                      <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                          <Award className="h-6 w-6" />
+                        </EmptyMedia>
+                        <EmptyTitle>No transactions yet</EmptyTitle>
+                        <EmptyDescription>
+                          Start scanning waste items to earn points and build your history
+                        </EmptyDescription>
+                      </EmptyHeader>
+                    </Empty>
                   )}
                 </CardContent>
               </Card>
@@ -209,11 +214,15 @@ export default function PointsPage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <Award className="h-12 w-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-medium">No recent activity</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Start scanning waste items to earn points</p>
-                    </div>
+                    <Empty>
+                      <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                          <Award className="h-6 w-6" />
+                        </EmptyMedia>
+                        <EmptyTitle>No recent activity</EmptyTitle>
+                        <EmptyDescription>Start scanning waste items to earn points</EmptyDescription>
+                      </EmptyHeader>
+                    </Empty>
                   )}
                 </CardContent>
               </Card>

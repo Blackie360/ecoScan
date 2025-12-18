@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
-import { Loader2 } from "lucide-react"
+import { Spinner } from "@/components/ui/spinner"
 
 // Fix Leaflet marker icon issues in Next.js
 const fixLeafletIcons = () => {
@@ -156,7 +156,7 @@ export default function InteractiveMap({
     return (
       <div className="flex items-center justify-center bg-muted rounded-md" style={{ height }}>
         <div className="flex flex-col items-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+          <Spinner className="h-8 w-8 text-primary mb-2" />
           <p className="text-sm text-muted-foreground">Loading map...</p>
         </div>
       </div>

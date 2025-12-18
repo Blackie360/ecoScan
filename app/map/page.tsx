@@ -3,8 +3,10 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { MapPin, Navigation, Search, Loader2, AlertTriangle } from "lucide-react"
+import { MapPin, Navigation, Search, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -284,7 +286,7 @@ export default function MapPage() {
                   className="flex-1"
                 />
                 <Button size="icon" onClick={searchLocation} disabled={isLoadingLocation || !searchQuery.trim()}>
-                  {isLoadingLocation ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                  {isLoadingLocation ? <Spinner className="h-4 w-4" /> : <Search className="h-4 w-4" />}
                 </Button>
               </div>
 
@@ -292,7 +294,7 @@ export default function MapPage() {
                 <Button onClick={getUserLocation} disabled={isLoadingLocation} variant="outline" className="w-full">
                   {isLoadingLocation ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Spinner className="mr-2 h-4 w-4" />
                       Getting location...
                     </>
                   ) : (
@@ -357,7 +359,7 @@ export default function MapPage() {
               <div className="w-full h-[300px] bg-muted rounded-md overflow-hidden relative">
                 {isLoadingMap && (
                   <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-10">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <Spinner className="h-8 w-8 text-primary" />
                   </div>
                 )}
 
@@ -374,16 +376,20 @@ export default function MapPage() {
                   />
                 ) : userLocation ? (
                   <div className="flex items-center justify-center h-full">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <Spinner className="h-8 w-8 text-primary" />
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center p-4">
-                    <MapPin className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium">No location selected</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Search for a location or use your current location to see recycling centers
-                    </p>
-                  </div>
+                  <Empty className="h-full">
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <MapPin className="h-6 w-6" />
+                      </EmptyMedia>
+                      <EmptyTitle>No location selected</EmptyTitle>
+                      <EmptyDescription>
+                        Search for a location or use your current location to see recycling centers
+                      </EmptyDescription>
+                    </EmptyHeader>
+                  </Empty>
                 )}
               </div>
             </CardContent>
@@ -402,11 +408,15 @@ export default function MapPage() {
                 {filteredLocations.length > 0 ? (
                   filteredLocations.map((location) => <RecyclingLocationCard key={location.id} location={location} />)
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <MapPin className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium">No locations found</h3>
-                    <p className="text-sm text-muted-foreground mt-1">Try changing your filters or search query</p>
-                  </div>
+                  <Empty>
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <MapPin className="h-6 w-6" />
+                      </EmptyMedia>
+                      <EmptyTitle>No locations found</EmptyTitle>
+                      <EmptyDescription>Try changing your filters or search query</EmptyDescription>
+                    </EmptyHeader>
+                  </Empty>
                 )}
               </div>
             </CardContent>

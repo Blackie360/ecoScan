@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify is now the default in Next.js 16, no need to specify
   eslint: {
     ignoreDuringBuilds: true,
   },

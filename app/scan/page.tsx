@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, RefreshCw, Award } from "lucide-react"
+import { Upload, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
@@ -189,7 +190,7 @@ export default function ScanPage() {
                   <div className="w-full md:w-1/2">
                     {isScanning ? (
                       <div className="flex flex-col items-center justify-center h-full space-y-4">
-                        <RefreshCw className="h-12 w-12 text-darkGreen-600 animate-spin" />
+                        <Spinner className="h-12 w-12 text-darkGreen-600" />
                         <Progress value={45} className="w-full" />
                         <p className="text-sm text-muted-foreground">Analyzing image and identifying waste type...</p>
                       </div>

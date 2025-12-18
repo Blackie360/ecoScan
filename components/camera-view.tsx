@@ -2,8 +2,9 @@
 
 import { useState, useRef, useCallback } from "react"
 import Webcam from "react-webcam"
-import { RefreshCw, AlertTriangle } from "lucide-react"
+import { AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { useMobile } from "@/hooks/use-mobile"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
@@ -112,7 +113,7 @@ export default function CameraView({ onCapture }: CameraViewProps) {
             />
             {!isCameraReady && (
               <div className="absolute inset-0 flex items-center justify-center bg-background/80">
-                <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
+                <Spinner className="h-8 w-8 text-muted-foreground" />
               </div>
             )}
           </div>
