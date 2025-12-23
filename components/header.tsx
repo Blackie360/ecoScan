@@ -43,10 +43,12 @@ export default function Header() {
   const isMobile = useMobile()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-sm">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-darkGreen-600">EcoScan</span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="text-xl font-bold text-gradient-eco group-hover:opacity-80 transition-opacity">
+            EcoScan
+          </span>
         </Link>
 
         {isMobile ? (
@@ -58,15 +60,17 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[240px] sm:w-[300px]">
-              <div className="flex flex-col gap-4 mt-8">
+              <div className="flex flex-col gap-2 mt-8">
                 {routes.map((route) => (
                   <Link
                     key={route.path}
                     href={route.path}
                     onClick={() => setOpen(false)}
                     className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent",
-                      pathname === route.path ? "bg-accent font-medium" : "",
+                      "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
+                      pathname === route.path 
+                        ? "bg-primary/10 text-primary font-semibold border-l-4 border-primary" 
+                        : "hover:bg-accent text-muted-foreground hover:text-foreground",
                     )}
                   >
                     <route.icon className="h-5 w-5" />
@@ -77,18 +81,23 @@ export default function Header() {
             </SheetContent>
           </Sheet>
         ) : (
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-1">
             {routes.map((route) => (
               <Link
                 key={route.path}
                 href={route.path}
                 className={cn(
-                  "flex items-center gap-2 text-sm font-medium transition-colors hover:text-darkGreen-600",
-                  pathname === route.path ? "text-darkGreen-600" : "text-muted-foreground",
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative",
+                  pathname === route.path 
+                    ? "text-primary font-semibold bg-primary/10" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                 )}
               >
                 <route.icon className="h-4 w-4" />
-                {route.name}
+                <span>{route.name}</span>
+                {pathname === route.path && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"></span>
+                )}
               </Link>
             ))}
           </nav>

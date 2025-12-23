@@ -1,11 +1,25 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Montserrat, Merriweather, Source_Code_Pro } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Header from "@/components/header"
 
-const inter = Inter({ subsets: ["latin"] })
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  variable: "--font-sans"
+})
+
+const merriweather = Merriweather({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
+  variable: "--font-serif"
+})
+
+const sourceCodePro = Source_Code_Pro({ 
+  subsets: ["latin"],
+  variable: "--font-mono"
+})
 
 export const metadata: Metadata = {
   title: "EcoScan - Waste Classification App",
@@ -64,16 +78,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${montserrat.variable} ${merriweather.variable} ${sourceCodePro.variable} ${montserrat.className}`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1">{children}</main>
-            <footer className="py-6 border-t">
+            <footer className="py-8 border-t bg-muted/30">
               <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
                 <p className="text-sm text-muted-foreground text-center md:text-left">
                   © 2025 EcoScan. All rights reserved.
                 </p>
+                <div className="flex items-center gap-4">
+                  <span className="text-xs text-muted-foreground">Made with ♻️ for a sustainable future</span>
+                </div>
               </div>
             </footer>
           </div>
