@@ -1,6 +1,7 @@
 import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import { createGateway } from "@ai-sdk/gateway";
 import { weatherTool } from "@/lib/tools/weather";
+import { locationTool } from "@/lib/tools/location";
 
 // Edge Runtime: ~30 seconds default, but streaming can continue longer
 // For longer processing time, switch to Node.js runtime and use maxDuration
@@ -13,7 +14,10 @@ export const runtime = "edge";
 const SYSTEM_PROMPT = `You are an outdoor guide AI called EcoScan.
 You recommend nearby green spaces, parks, walking paths, and hiking trails based on user mood, time, fitness level, transport, and current weather.
 
-IMPORTANT: Always use the weather tool to get current conditions before making recommendations.
+IMPORTANT WORKFLOW:
+1. First, use the weather tool to get current conditions
+2. Then, use the location tool for EACH place you recommend to get real photos and Google Maps links
+3. Finally, provide your recommendations with the real data
 
 When providing recommendations, ALWAYS respond with a brief friendly intro followed by JSON in this EXACT format:
 
@@ -28,6 +32,10 @@ When providing recommendations, ALWAYS respond with a brief friendly intro follo
       "best_time": "Best time to visit",
       "duration": "Suggested visit duration",
       "difficulty": "Easy/Moderate/Challenging",
+      "mapsUrl": "Google Maps URL from location tool",
+      "photoUrl": "Real photo URL from location tool",
+      "address": "Full address from location tool",
+      "rating": 4.5,
       "weather": {
         "condition": "Current weather",
         "temperature": "Temperature",
@@ -44,6 +52,7 @@ When providing recommendations, ALWAYS respond with a brief friendly intro follo
 Rules:
 - Focus on real places in Kenya
 - Provide 2-4 recommendations
+- ALWAYS use the location tool to get real mapsUrl and photoUrl for each place
 - Include practical, actionable advice
 - Be calm, friendly, and helpful
 - NEVER use "parks" key, ALWAYS use "recommendations" key`;
@@ -95,8 +104,9 @@ export async function POST(req: Request) {
       messages: modelMessages,
       tools: {
         weather: weatherTool,
+        location: locationTool,
       },
-      stopWhen: stepCountIs(5), // Allow up to 5 steps for multi-step reasoning
+      stopWhen: stepCountIs(10), // Allow up to 10 steps for weather + multiple location lookups
     });
 
     return result.toUIMessageStreamResponse();

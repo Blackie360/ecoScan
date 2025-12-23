@@ -38,8 +38,14 @@ import {
   Footprints,
   Mountain,
   LucideIcon,
+  ExternalLink,
+  Star,
+  Navigation,
+  ImageIcon,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useState, useMemo } from "react";
+import { DestinationImage } from "@/components/DestinationImage";
 
 // Quick prompt suggestions
 const PROMPT_SUGGESTIONS: { icon: LucideIcon; label: string; prompt: string }[] = [
@@ -88,6 +94,11 @@ type Recommendation = {
   transport?: string[];
   what_to_carry?: string[];
   safety_notes?: string[];
+  // Real location data from location tool
+  mapsUrl?: string;
+  photoUrl?: string;
+  address?: string;
+  rating?: number;
   // Alternative fields from different AI responses
   location?: string;
   accessibility?: string;
@@ -95,6 +106,41 @@ type Recommendation = {
   activities?: string[];
   safety?: string;
 };
+
+// Helper to strip JSON from text (for display purposes)
+function stripJsonFromText(text: string): string {
+  // Remove JSON code blocks
+  let cleaned = text.replace(/```(?:json)?\s*\{[\s\S]*?\}\s*```/g, '').trim();
+  
+  // Also try to remove raw JSON objects if present
+  const jsonStart = cleaned.indexOf("{");
+  if (jsonStart >= 0) {
+    // Find if there's a valid JSON object and remove it
+    let braceCount = 0;
+    let inJson = false;
+    let jsonEnd = -1;
+    
+    for (let i = jsonStart; i < cleaned.length; i++) {
+      if (cleaned[i] === "{") {
+        braceCount++;
+        inJson = true;
+      }
+      if (cleaned[i] === "}") {
+        braceCount--;
+      }
+      if (inJson && braceCount === 0) {
+        jsonEnd = i + 1;
+        break;
+      }
+    }
+    
+    if (jsonEnd > jsonStart) {
+      cleaned = cleaned.substring(0, jsonStart) + cleaned.substring(jsonEnd);
+    }
+  }
+  
+  return cleaned.trim();
+}
 
 // Helper to parse recommendations from AI response (flexible parsing)
 function parseRecommendations(text: string) {
@@ -145,6 +191,11 @@ function parseRecommendations(text: string) {
           transport: rec.transport || [],
           what_to_carry: rec.what_to_carry || rec.facilities || [],
           safety_notes: rec.safety_notes || (rec.safety ? [rec.safety] : []),
+          // Real location data
+          mapsUrl: rec.mapsUrl || "",
+          photoUrl: rec.photoUrl || "",
+          address: rec.address || "",
+          rating: rec.rating,
         }));
         return { introText, recommendations: normalized };
       }
@@ -280,11 +331,20 @@ export default function ChatPage() {
                           }
                         }
 
-                        // Default message rendering
+                        // Default message rendering - strip any JSON from assistant messages
+                        const displayText = message.role === "assistant" 
+                          ? stripJsonFromText(textContent)
+                          : textContent;
+                        
+                        // Don't render empty messages
+                        if (!displayText.trim()) {
+                          return null;
+                        }
+                        
                         return (
                           <Message from={message.role} key={message.id}>
                             <MessageContent>
-                              <MessageResponse>{textContent}</MessageResponse>
+                              <MessageResponse>{displayText}</MessageResponse>
                             </MessageContent>
                           </Message>
                         );
@@ -360,20 +420,70 @@ export default function ChatPage() {
                 key={index}
                 className="border-0 shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
               >
-                <div className="h-2 bg-gradient-to-r from-primary/60 to-primary/30" />
+                {/* Real Photo or AI Generated Image */}
+                {rec.photoUrl ? (
+                  <div className="relative aspect-video w-full overflow-hidden bg-muted">
+                    <img
+                      src={rec.photoUrl}
+                      alt={rec.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Hide broken image
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                    <div className="absolute bottom-2 left-2">
+                      <Badge variant="secondary" className="bg-black/50 text-white border-0 text-xs">
+                        <ImageIcon className="w-3 h-3 mr-1" />
+                        Real Photo
+                      </Badge>
+                    </div>
+                  </div>
+                ) : (
+                  <DestinationImage
+                    placeName={rec.name}
+                    placeType={rec.type}
+                    aspectRatio="video"
+                    className="w-full"
+                  />
+                )}
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <CardTitle className="text-lg mb-1">{rec.name}</CardTitle>
                       <CardDescription className="flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
-                        {rec.distance}
+                        {rec.address || rec.distance}
                       </CardDescription>
                     </div>
-                    <Badge variant="secondary">{rec.type}</Badge>
+                    <div className="flex flex-col items-end gap-1">
+                      <Badge variant="secondary">{rec.type}</Badge>
+                      {rec.rating && (
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                          <span>{rec.rating.toFixed(1)}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Google Maps Button */}
+                  {rec.mapsUrl && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      asChild
+                    >
+                      <a href={rec.mapsUrl} target="_blank" rel="noopener noreferrer">
+                        <Navigation className="w-4 h-4 mr-2" />
+                        Open in Google Maps
+                        <ExternalLink className="w-3 h-3 ml-2" />
+                      </a>
+                    </Button>
+                  )}
+
                   {/* Why */}
                   <p className="text-sm text-foreground">{rec.why}</p>
 
