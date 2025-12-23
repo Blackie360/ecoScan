@@ -153,6 +153,19 @@ export default function ChatPage() {
                       .map((part) => (part as { text: string }).text)
                       .join("");
                     
+                    // Check if message contains JSON (recommendations)
+                    let parsedContent = null;
+                    try {
+                      const jsonMatch = textParts.match(/```(?:json)?\s*(\{[\s\S]*\})\s*```/);
+                      if (jsonMatch) {
+                        parsedContent = JSON.parse(jsonMatch[1]);
+                      } else if (textParts.trim().startsWith("{")) {
+                        parsedContent = JSON.parse(textParts.trim());
+                      }
+                    } catch (e) {
+                      // Not JSON, continue with regular text rendering
+                    }
+                    
                     return (
                       <div
                         key={message.id}
@@ -161,15 +174,90 @@ export default function ChatPage() {
                         }`}
                       >
                         <div
-                          className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                          className={`max-w-[80%] rounded-lg px-4 py-3 ${
                             message.role === "user"
                               ? "bg-primary text-primary-foreground"
                               : "bg-muted text-foreground"
                           }`}
                         >
-                          <p className="text-sm whitespace-pre-wrap">
-                            {textParts}
-                          </p>
+                          {message.role === "assistant" && parsedContent ? (
+                            <div className="space-y-3">
+                              {/* Weather Info */}
+                              {parsedContent.condition && (
+                                <div className="bg-background/50 rounded-lg p-3 border border-border">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Cloud className="w-4 h-4 text-primary" />
+                                    <span className="text-sm font-semibold">Current Weather</span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 text-sm">
+                                    <div>
+                                      <span className="text-muted-foreground">Condition: </span>
+                                      <span className="font-medium">{parsedContent.condition}</span>
+                                    </div>
+                                    <div>
+                                      <span className="text-muted-foreground">Temperature: </span>
+                                      <span className="font-medium">{parsedContent.temperature}</span>
+                                    </div>
+                                    {parsedContent.precipitationChance && (
+                                      <div className="col-span-2">
+                                        <span className="text-muted-foreground">Precipitation: </span>
+                                        <span className="font-medium">{parsedContent.precipitationChance}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Hiking Spots or Recommendations */}
+                              {(parsedContent.hiking_spots || parsedContent.recommendations) && (
+                                <div className="space-y-2">
+                                  <h4 className="text-sm font-semibold mb-2">Recommendations:</h4>
+                                  {(parsedContent.hiking_spots || parsedContent.recommendations || []).map((spot: any, idx: number) => (
+                                    <Card key={idx} className="bg-background/50 border-border">
+                                      <CardHeader className="pb-2">
+                                        <div className="flex items-start justify-between gap-2">
+                                          <CardTitle className="text-base">{spot.name}</CardTitle>
+                                          {spot.type && (
+                                            <Badge variant="secondary" className="text-xs">{spot.type}</Badge>
+                                          )}
+                                        </div>
+                                        {spot.location && (
+                                          <CardDescription className="flex items-center gap-1 mt-1">
+                                            <MapPin className="w-3 h-3" />
+                                            {spot.location}
+                                          </CardDescription>
+                                        )}
+                                      </CardHeader>
+                                      <CardContent className="space-y-2 text-sm">
+                                        {spot.description && (
+                                          <p className="text-foreground">{spot.description}</p>
+                                        )}
+                                        {spot.distance && (
+                                          <div className="flex items-center gap-2 text-muted-foreground">
+                                            <Clock className="w-3 h-3" />
+                                            <span>{spot.distance}</span>
+                                          </div>
+                                        )}
+                                        {spot.accessibility && (
+                                          <div className="flex items-center gap-2 text-muted-foreground">
+                                            <Car className="w-3 h-3" />
+                                            <span>{spot.accessibility}</span>
+                                          </div>
+                                        )}
+                                      </CardContent>
+                                    </Card>
+                                  ))}
+                                </div>
+                              )}
+                              
+                              {/* Fallback to regular text if no structured content */}
+                              {!parsedContent.condition && !parsedContent.hiking_spots && !parsedContent.recommendations && (
+                                <p className="text-sm whitespace-pre-wrap">{textParts}</p>
+                              )}
+                            </div>
+                          ) : (
+                            <p className="text-sm whitespace-pre-wrap">{textParts}</p>
+                          )}
                         </div>
                       </div>
                     );
