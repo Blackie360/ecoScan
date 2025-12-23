@@ -4,6 +4,7 @@ import { FeatureCard } from "@/components/FeatureCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { GradientBackground } from "@/components/GradientBackground";
+import { ChatWidget } from "@/components/ChatWidget";
 import Link from "next/link";
 import {
   MapPin,
@@ -272,6 +273,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Chat Widget */}
+      <ChatWidget />
     </main>
   );
 }
