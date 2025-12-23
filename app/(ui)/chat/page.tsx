@@ -44,7 +44,7 @@ import {
   ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { DestinationImage } from "@/components/DestinationImage";
 
@@ -207,7 +207,8 @@ function parseRecommendations(text: string) {
   return null;
 }
 
-export default function ChatPage() {
+// Inner component that uses useSearchParams
+function ChatPageContent() {
   const [input, setInput] = useState("");
   const searchParams = useSearchParams();
   const hasAutoSent = useRef(false);
@@ -599,5 +600,26 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function ChatPageLoading() {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-center">
+        <Sparkles className="w-12 h-12 text-primary mx-auto mb-4 animate-pulse" />
+        <p className="text-muted-foreground">Loading chat...</p>
+      </div>
+    </div>
+  );
+}
+
+// Main export wrapped in Suspense for useSearchParams
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<ChatPageLoading />}>
+      <ChatPageContent />
+    </Suspense>
   );
 }
