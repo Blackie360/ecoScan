@@ -44,7 +44,8 @@ import {
   ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { DestinationImage } from "@/components/DestinationImage";
 
 // Quick prompt suggestions
@@ -208,6 +209,8 @@ function parseRecommendations(text: string) {
 
 export default function ChatPage() {
   const [input, setInput] = useState("");
+  const searchParams = useSearchParams();
+  const hasAutoSent = useRef(false);
 
   const transport = useMemo(
     () => new DefaultChatTransport({ api: "/api/ai" }),
@@ -217,6 +220,19 @@ export default function ChatPage() {
   const { messages, sendMessage, status, error } = useChat({ transport });
 
   const isLoading = status === "streaming" || status === "submitted";
+
+  // Auto-send message from URL parameter (e.g., from location button)
+  useEffect(() => {
+    const autoMessage = searchParams.get("autoMessage");
+    if (autoMessage && !hasAutoSent.current && messages.length === 0) {
+      hasAutoSent.current = true;
+      // Small delay to ensure the component is fully mounted
+      const timer = setTimeout(() => {
+        sendMessage({ text: autoMessage });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, sendMessage, messages.length]);
 
   const handleSubmit = () => {
     if (input.trim() && !isLoading) {
