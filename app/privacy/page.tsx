@@ -55,6 +55,30 @@ export default function PrivacyPage() {
             </section>
 
             <section>
+              <h2 className="text-2xl font-semibold mb-3">Service Disclaimer and Limitation of Liability</h2>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                <strong className="text-foreground">Important:</strong> EcoScan is a recommendation service only. We provide suggestions for places to hike, walk, or spend time in nature ("touch grass"). 
+              </p>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                <strong className="text-foreground">EcoScan does not take responsibility for:</strong>
+              </p>
+              <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4 mb-3">
+                <li>Any activities you engage in at suggested locations</li>
+                <li>Safety conditions, hazards, or dangers at any location</li>
+                <li>Weather conditions or natural disasters</li>
+                <li>Accidents, injuries, or health issues that may occur</li>
+                <li>Property damage or loss</li>
+                <li>Any other problems or issues that may arise from visiting suggested locations</li>
+              </ul>
+              <p className="text-muted-foreground leading-relaxed">
+                By using EcoScan, you acknowledge that you are solely responsible for your own safety and well-being when visiting 
+                any suggested location. Always exercise caution, check current conditions, follow local regulations, and use your 
+                best judgment when exploring outdoor spaces. EcoScan provides information only and does not guarantee the accuracy, 
+                safety, or suitability of any location.
+              </p>
+            </section>
+
+            <section>
               <h2 className="text-2xl font-semibold mb-3">Data Security</h2>
               <p className="text-muted-foreground leading-relaxed">
                 We implement appropriate technical and organizational security measures to protect your personal information.

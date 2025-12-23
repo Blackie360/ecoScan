@@ -52,12 +52,33 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold mb-3">Limitations</h2>
+              <h2 className="text-2xl font-semibold mb-3">Service Nature and Limitations</h2>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                <strong className="text-foreground">EcoScan is a recommendation service only.</strong> We provide suggestions for places 
+                to hike, walk, or spend time in nature ("touch grass"). EcoScan does not take responsibility for any activities you 
+                engage in at suggested locations or any problems that may arise from visiting them.
+              </p>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                <strong className="text-foreground">EcoScan is not liable for:</strong>
+              </p>
+              <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4 mb-3">
+                <li>Any activities you engage in at suggested locations</li>
+                <li>Safety conditions, hazards, or dangers at any location</li>
+                <li>Weather conditions or natural disasters</li>
+                <li>Accidents, injuries, or health issues that may occur</li>
+                <li>Property damage or loss</li>
+                <li>Any other problems or issues that may arise from visiting suggested locations</li>
+              </ul>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                By using EcoScan, you acknowledge that you are solely responsible for your own safety and well-being when visiting 
+                any suggested location. Always exercise caution, check current conditions, follow local regulations, and use your 
+                best judgment when exploring outdoor spaces.
+              </p>
               <p className="text-muted-foreground leading-relaxed">
                 In no event shall EcoScan or its suppliers be liable for any damages (including, without limitation, damages for
-                loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials
-                on EcoScan, even if EcoScan or an authorized representative has been notified orally or in writing of the possibility
-                of such damage.
+                loss of data or profit, personal injury, property damage, or due to business interruption) arising out of the use 
+                or inability to use EcoScan or visiting any suggested location, even if EcoScan or an authorized representative has 
+                been notified orally or in writing of the possibility of such damage.
               </p>
             </section>
 
