@@ -173,9 +173,12 @@ export default function Home() {
                 <Button
                   size="lg"
                   className="shadow-lg hover:shadow-xl transition-all"
+                  asChild
                 >
-                  Start Exploring
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <Link href="/chat">
+                    Start Exploring
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Link>
                 </Button>
                 <Button
                   size="lg"
@@ -183,7 +186,7 @@ export default function Home() {
                   className="border-2"
                   asChild
                 >
-                  <Link href="#features">Learn More</Link>
+                  <a href="#features">Learn More</a>
                 </Button>
               </div>
             </CardContent>
@@ -210,31 +213,28 @@ export default function Home() {
               <h4 className="font-semibold mb-4 text-foreground">Product</h4>
               <ul className="space-y-2 text-muted-foreground">
                 <li>
-                  <Link
+                  <a
                     href="#features"
                     className="hover:text-foreground transition-colors"
-                    scroll={true}
                   >
                     Features
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
+                  <a
                     href="#how-it-works"
                     className="hover:text-foreground transition-colors"
-                    scroll={true}
                   >
                     How It Works
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
+                  <a
                     href="#benefits"
                     className="hover:text-foreground transition-colors"
-                    scroll={true}
                   >
                     Benefits
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>

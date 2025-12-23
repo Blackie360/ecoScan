@@ -1,11 +1,93 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { MapPin, Sparkles } from "lucide-react";
+import { MapPin, Sparkles, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export function Hero() {
+  const router = useRouter();
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  const handleDiscoverNearby = async () => {
+    setIsLocating(true);
+    setLocationError(null);
+
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation is not supported by your browser");
+      setIsLocating(false);
+      // Fall back to chat without location
+      router.push("/chat");
+      return;
+    }
+
+    // Request location
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        
+        // Try to get city name from coordinates using reverse geocoding
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await response.json();
+          
+          const city = data.address?.city || 
+                       data.address?.town || 
+                       data.address?.village ||
+                       data.address?.county ||
+                       "your area";
+          
+          // Navigate to chat with location info
+          const locationQuery = encodeURIComponent(
+            `Find me outdoor places near ${city}, Kenya (coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)})`
+          );
+          router.push(`/chat?autoMessage=${locationQuery}`);
+        } catch {
+          // If reverse geocoding fails, just use coordinates
+          const locationQuery = encodeURIComponent(
+            `Find me outdoor places near my location (coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}) in Kenya`
+          );
+          router.push(`/chat?autoMessage=${locationQuery}`);
+        }
+        
+        setIsLocating(false);
+      },
+      (error) => {
+        // Handle location errors
+        let errorMessage = "Unable to get your location";
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = "Location access denied. Please enable location permissions.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = "Location unavailable. Please try again.";
+            break;
+          case error.TIMEOUT:
+            errorMessage = "Location request timed out. Please try again.";
+            break;
+        }
+        setLocationError(errorMessage);
+        setIsLocating(false);
+        
+        // Fall back to chat without location after a delay
+        setTimeout(() => {
+          router.push("/chat");
+        }, 2000);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000, // Cache for 5 minutes
+      }
+    );
+  };
+
   return (
     <div className="relative min-h-[90vh] flex items-center overflow-hidden bg-background grain-overlay">
       <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
@@ -30,9 +112,20 @@ export function Hero() {
               <Button
                 size="lg"
                 className="shadow-lg hover:shadow-xl transition-all"
+                onClick={handleDiscoverNearby}
+                disabled={isLocating}
               >
-                <MapPin className="mr-2 w-5 h-5" />
-                Discover Nearby Places
+                {isLocating ? (
+                  <>
+                    <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                    Getting Location...
+                  </>
+                ) : (
+                  <>
+                    <MapPin className="mr-2 w-5 h-5" />
+                    Discover Nearby Places
+                  </>
+                )}
               </Button>
               <Button
                 size="lg"
@@ -40,9 +133,16 @@ export function Hero() {
                 className="border-2"
                 asChild
               >
-                <Link href="#features">Learn More</Link>
+                <a href="#features">Learn More</a>
               </Button>
             </div>
+            
+            {/* Location error message */}
+            {locationError && (
+              <p className="text-sm text-destructive animate-in fade-in">
+                {locationError}
+              </p>
+            )}
             
             <p className="text-sm text-muted-foreground">
               Free to use • No signup required • Privacy-first
@@ -89,4 +189,3 @@ export function Hero() {
     </div>
   );
 }
-

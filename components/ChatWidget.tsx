@@ -35,8 +35,11 @@ import {
   Zap,
   Mountain,
   Heart,
+  Navigation,
+  Star,
 } from "lucide-react";
 import { useState, useMemo } from "react";
+import { DestinationImage } from "@/components/DestinationImage";
 
 // Quick prompt suggestions
 const PROMPT_SUGGESTIONS = [
@@ -75,6 +78,11 @@ type Recommendation = {
   transport?: string[];
   what_to_carry?: string[];
   safety_notes?: string[];
+  // Real location data from location tool
+  mapsUrl?: string;
+  photoUrl?: string;
+  address?: string;
+  rating?: number;
   // Alternative fields from different AI responses
   location?: string;
   accessibility?: string;
@@ -82,6 +90,40 @@ type Recommendation = {
   activities?: string[];
   safety?: string;
 };
+
+// Helper to strip JSON from text (for display purposes)
+function stripJsonFromText(text: string): string {
+  // Remove JSON code blocks
+  let cleaned = text.replace(/```(?:json)?\s*\{[\s\S]*?\}\s*```/g, '').trim();
+  
+  // Also try to remove raw JSON objects if present
+  const jsonStart = cleaned.indexOf("{");
+  if (jsonStart >= 0) {
+    let braceCount = 0;
+    let inJson = false;
+    let jsonEnd = -1;
+    
+    for (let i = jsonStart; i < cleaned.length; i++) {
+      if (cleaned[i] === "{") {
+        braceCount++;
+        inJson = true;
+      }
+      if (cleaned[i] === "}") {
+        braceCount--;
+      }
+      if (inJson && braceCount === 0) {
+        jsonEnd = i + 1;
+        break;
+      }
+    }
+    
+    if (jsonEnd > jsonStart) {
+      cleaned = cleaned.substring(0, jsonStart) + cleaned.substring(jsonEnd);
+    }
+  }
+  
+  return cleaned.trim();
+}
 
 // Helper to parse recommendations from AI response (flexible parsing)
 function parseRecommendations(text: string) {
@@ -132,6 +174,11 @@ function parseRecommendations(text: string) {
           transport: rec.transport || [],
           what_to_carry: rec.what_to_carry || rec.facilities || [],
           safety_notes: rec.safety_notes || (rec.safety ? [rec.safety] : []),
+          // Real location data
+          mapsUrl: rec.mapsUrl || "",
+          photoUrl: rec.photoUrl || "",
+          address: rec.address || "",
+          rating: rec.rating,
         }));
         return { introText, recommendations: normalized };
       }
@@ -249,54 +296,93 @@ export function ChatWidget() {
                                 {parsed.introText && (
                                   <MessageResponse>{parsed.introText}</MessageResponse>
                                 )}
-                                {/* Recommendation Cards */}
+                                {/* Recommendation Cards with Real Photos */}
                                 <div className="space-y-3 mt-2">
                                   {parsed.recommendations.slice(0, 3).map((rec, index) => (
                                     <div
                                       key={index}
-                                      className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-3 border border-primary/20"
+                                      className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl overflow-hidden border border-primary/20"
                                     >
-                                      <div className="flex items-start justify-between gap-2 mb-2">
-                                        <h4 className="font-semibold text-sm text-foreground">
-                                          {rec.name}
-                                        </h4>
-                                        <Badge variant="secondary" className="text-xs flex-shrink-0">
-                                          {rec.type}
-                                        </Badge>
-                                      </div>
-                                      {rec.why && (
-                                        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
-                                          {rec.why}
-                                        </p>
-                                      )}
-                                      <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                                        {rec.distance && (
-                                          <span className="flex items-center gap-1 bg-background/50 px-2 py-0.5 rounded-full">
-                                            <MapPin className="w-3 h-3" />
-                                            {rec.distance}
-                                          </span>
-                                        )}
-                                        {rec.duration && (
-                                          <span className="flex items-center gap-1 bg-background/50 px-2 py-0.5 rounded-full">
-                                            <Clock className="w-3 h-3" />
-                                            {rec.duration}
-                                          </span>
-                                        )}
-                                        {rec.difficulty && (
-                                          <span className="flex items-center gap-1 bg-background/50 px-2 py-0.5 rounded-full">
-                                            <TrendingUp className="w-3 h-3" />
-                                            {rec.difficulty}
-                                          </span>
-                                        )}
-                                      </div>
-                                      {rec.weather && (
-                                        <div className="mt-2 pt-2 border-t border-primary/10 flex items-center gap-2 text-xs">
-                                          <Cloud className="w-3 h-3 text-primary" />
-                                          <span className="text-muted-foreground">
-                                            {rec.weather.condition} • {rec.weather.temperature}
-                                          </span>
+                                      {/* Real Photo or AI Generated Image */}
+                                      {rec.photoUrl ? (
+                                        <div className="relative aspect-video w-full overflow-hidden bg-muted">
+                                          <img
+                                            src={rec.photoUrl}
+                                            alt={rec.name}
+                                            className="w-full h-full object-cover"
+                                          />
                                         </div>
+                                      ) : (
+                                        <DestinationImage
+                                          placeName={rec.name}
+                                          placeType={rec.type}
+                                          aspectRatio="video"
+                                          className="w-full"
+                                        />
                                       )}
+                                      <div className="p-3">
+                                        <div className="flex items-start justify-between gap-2 mb-2">
+                                          <h4 className="font-semibold text-sm text-foreground">
+                                            {rec.name}
+                                          </h4>
+                                          <div className="flex items-center gap-1">
+                                            {rec.rating && (
+                                              <span className="flex items-center gap-0.5 text-xs text-muted-foreground">
+                                                <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                                                {rec.rating.toFixed(1)}
+                                              </span>
+                                            )}
+                                            <Badge variant="secondary" className="text-xs flex-shrink-0">
+                                              {rec.type}
+                                            </Badge>
+                                          </div>
+                                        </div>
+                                        {rec.why && (
+                                          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+                                            {rec.why}
+                                          </p>
+                                        )}
+                                        {/* Google Maps Link */}
+                                        {rec.mapsUrl && (
+                                          <a
+                                            href={rec.mapsUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1 text-xs text-primary hover:underline mb-2"
+                                          >
+                                            <Navigation className="w-3 h-3" />
+                                            Open in Maps
+                                          </a>
+                                        )}
+                                        <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                                          {rec.distance && (
+                                            <span className="flex items-center gap-1 bg-background/50 px-2 py-0.5 rounded-full">
+                                              <MapPin className="w-3 h-3" />
+                                              {rec.distance}
+                                            </span>
+                                          )}
+                                          {rec.duration && (
+                                            <span className="flex items-center gap-1 bg-background/50 px-2 py-0.5 rounded-full">
+                                              <Clock className="w-3 h-3" />
+                                              {rec.duration}
+                                            </span>
+                                          )}
+                                          {rec.difficulty && (
+                                            <span className="flex items-center gap-1 bg-background/50 px-2 py-0.5 rounded-full">
+                                              <TrendingUp className="w-3 h-3" />
+                                              {rec.difficulty}
+                                            </span>
+                                          )}
+                                        </div>
+                                        {rec.weather && (
+                                          <div className="mt-2 pt-2 border-t border-primary/10 flex items-center gap-2 text-xs">
+                                            <Cloud className="w-3 h-3 text-primary" />
+                                            <span className="text-muted-foreground">
+                                              {rec.weather.condition} • {rec.weather.temperature}
+                                            </span>
+                                          </div>
+                                        )}
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
@@ -306,11 +392,20 @@ export function ChatWidget() {
                         }
                       }
 
-                      // Default message rendering
+                      // Default message rendering - strip JSON from assistant messages
+                      const displayText = message.role === "assistant" 
+                        ? stripJsonFromText(textContent)
+                        : textContent;
+                      
+                      // Don't render empty messages
+                      if (!displayText.trim()) {
+                        return null;
+                      }
+                      
                       return (
                         <Message from={message.role} key={message.id}>
                           <MessageContent>
-                            <MessageResponse>{textContent}</MessageResponse>
+                            <MessageResponse>{displayText}</MessageResponse>
                           </MessageContent>
                         </Message>
                       );
