@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Camera, Sparkles } from "lucide-react";
+import { Camera } from "lucide-react";
 import Link from "next/link";
 
 export function Hero() {

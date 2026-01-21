@@ -44,7 +44,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-semibold mb-3">Disclaimer</h2>
               <p className="text-muted-foreground leading-relaxed">
-                The materials on EcoScan are provided on an 'as is' basis. EcoScan makes no warranties, expressed or implied,
+                The materials on EcoScan are provided on an &apos;as is&apos; basis. EcoScan makes no warranties, expressed or implied,
                 and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions
                 of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation
                 of rights.
@@ -55,7 +55,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-semibold mb-3">Service Nature and Limitations</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
                 <strong className="text-foreground">EcoScan is a recommendation service only.</strong> We provide suggestions for places 
-                to hike, walk, or spend time in nature ("touch grass"). EcoScan does not take responsibility for any activities you 
+                to hike, walk, or spend time in nature (&quot;touch grass&quot;). EcoScan does not take responsibility for any activities you 
                 engage in at suggested locations or any problems that may arise from visiting them.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-3">

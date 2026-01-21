@@ -35,7 +35,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { useState, useRef, Suspense } from "react";
-import Image from "next/image";
 import { DisposalRecommendation } from "@/lib/schemas/recommendations";
 
 // Helper to parse disposal recommendation from AI response

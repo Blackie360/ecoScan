@@ -10,7 +10,6 @@ import { SmoothLink, useAnchorScroll } from "@/components/SmoothLink";
 import Link from "next/link";
 import {
   Camera,
-  Sparkles,
   Recycle,
   Shield,
   MapPin,

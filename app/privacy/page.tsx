@@ -57,7 +57,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-semibold mb-3">Service Disclaimer and Limitation of Liability</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                <strong className="text-foreground">Important:</strong> EcoScan is a recommendation service only. We provide suggestions for places to hike, walk, or spend time in nature ("touch grass"). 
+                <strong className="text-foreground">Important:</strong> EcoScan is a recommendation service only. We provide suggestions for places to hike, walk, or spend time in nature (&quot;touch grass&quot;). 
               </p>
               <p className="text-muted-foreground leading-relaxed mb-3">
                 <strong className="text-foreground">EcoScan does not take responsibility for:</strong>
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-semibold mb-3">Changes to This Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
                 We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new
-                Privacy Policy on this page and updating the "Last updated" date.
+                Privacy Policy on this page and updating the &quot;Last updated&quot; date.
               </p>
             </section>
 

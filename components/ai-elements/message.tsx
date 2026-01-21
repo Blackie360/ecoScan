@@ -211,13 +211,9 @@ export const MessageBranchContent = ({
   ));
 };
 
-export type MessageBranchSelectorProps = HTMLAttributes<HTMLDivElement> & {
-  from: UIMessage["role"];
-};
+export type MessageBranchSelectorProps = HTMLAttributes<HTMLDivElement>;
 
 export const MessageBranchSelector = ({
-  className,
-  from,
   ...props
 }: MessageBranchSelectorProps) => {
   const { totalBranches } = useMessageBranch();
@@ -263,7 +259,6 @@ export type MessageBranchNextProps = ComponentProps<typeof Button>;
 
 export const MessageBranchNext = ({
   children,
-  className,
   ...props
 }: MessageBranchNextProps) => {
   const { goToNext, totalBranches } = useMessageBranch();
