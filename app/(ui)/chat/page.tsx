@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type FileUIPart } from "ai";
 import {
   Conversation,
   ConversationContent,
@@ -244,7 +244,7 @@ function ChatPageContent() {
                         // Render user messages with images
                         if (message.role === "user") {
                           const imageParts = message.parts.filter(
-                            (part) => part.type === "file" && part.mediaType?.startsWith("image/")
+                            (part): part is FileUIPart => part.type === "file" && part.mediaType?.startsWith("image/") === true
                           );
                           return (
                             <Message from={message.role} key={message.id}>
@@ -252,13 +252,15 @@ function ChatPageContent() {
                                 {imageParts.length > 0 && (
                                   <div className="mb-2 space-y-2">
                                     {imageParts.map((part, idx) => (
-                                      <div key={idx} className="relative rounded-lg overflow-hidden border border-border">
-                                        <img
-                                          src={part.url}
-                                          alt={`Uploaded image ${idx + 1}`}
-                                          className="w-full max-w-md h-auto"
-                                        />
-                                      </div>
+                                      part.url ? (
+                                        <div key={idx} className="relative rounded-lg overflow-hidden border border-border">
+                                          <img
+                                            src={part.url}
+                                            alt={`Uploaded image ${idx + 1}`}
+                                            className="w-full max-w-md h-auto"
+                                          />
+                                        </div>
+                                      ) : null
                                     ))}
                                   </div>
                                 )}

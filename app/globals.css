@@ -57,38 +57,38 @@
 
 :root {
   /* Rusty color palette - warm, earthy tones */
-  --background: rgb(250, 245, 240);
-  --foreground: rgb(69, 39, 19);
-  --card: rgb(255, 250, 245);
-  --card-foreground: rgb(69, 39, 19);
-  --popover: rgb(255, 250, 245);
-  --popover-foreground: rgb(69, 39, 19);
-  --primary: rgb(183, 65, 14); /* Rust orange */
+  --background: rgb(248, 241, 235);
+  --foreground: rgb(59, 35, 20);
+  --card: rgb(251, 246, 241);
+  --card-foreground: rgb(59, 35, 20);
+  --popover: rgb(251, 246, 241);
+  --popover-foreground: rgb(59, 35, 20);
+  --primary: rgb(180, 74, 31); /* Rust orange */
   --primary-foreground: rgb(255, 255, 255);
-  --secondary: rgb(245, 222, 179); /* Peach/navajo white */
-  --secondary-foreground: rgb(139, 69, 19); /* Saddle brown */
-  --muted: rgb(245, 235, 220);
-  --muted-foreground: rgb(139, 90, 43);
-  --accent: rgb(205, 133, 63); /* Peru/terracotta */
+  --secondary: rgb(240, 210, 190); /* Warm clay */
+  --secondary-foreground: rgb(122, 59, 26); /* Deep rust brown */
+  --muted: rgb(242, 227, 215);
+  --muted-foreground: rgb(140, 90, 58);
+  --accent: rgb(196, 106, 59); /* Terracotta */
   --accent-foreground: rgb(255, 255, 255);
-  --destructive: rgb(184, 63, 39); /* Rust red */
+  --destructive: rgb(168, 60, 42); /* Rust red */
   --destructive-foreground: rgb(255, 255, 255);
-  --border: rgb(222, 184, 135); /* Burlywood */
-  --input: rgb(222, 184, 135);
-  --ring: rgb(183, 65, 14);
-  --chart-1: rgb(205, 133, 63);
-  --chart-2: rgb(210, 105, 30);
-  --chart-3: rgb(183, 65, 14);
-  --chart-4: rgb(160, 82, 45);
-  --chart-5: rgb(139, 69, 19);
-  --sidebar: rgb(245, 235, 220);
-  --sidebar-foreground: rgb(69, 39, 19);
-  --sidebar-primary: rgb(183, 65, 14);
+  --border: rgb(225, 193, 165); /* Warm sand */
+  --input: rgb(225, 193, 165);
+  --ring: rgb(180, 74, 31);
+  --chart-1: rgb(196, 106, 59);
+  --chart-2: rgb(185, 90, 42);
+  --chart-3: rgb(169, 75, 34);
+  --chart-4: rgb(138, 63, 28);
+  --chart-5: rgb(111, 47, 22);
+  --sidebar: rgb(242, 227, 215);
+  --sidebar-foreground: rgb(59, 35, 20);
+  --sidebar-primary: rgb(180, 74, 31);
   --sidebar-primary-foreground: rgb(255, 255, 255);
-  --sidebar-accent: rgb(205, 133, 63);
+  --sidebar-accent: rgb(196, 106, 59);
   --sidebar-accent-foreground: rgb(255, 255, 255);
-  --sidebar-border: rgb(222, 184, 135);
-  --sidebar-ring: rgb(183, 65, 14);
+  --sidebar-border: rgb(225, 193, 165);
+  --sidebar-ring: rgb(180, 74, 31);
   --font-sans: Montserrat, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Source Code Pro, monospace;
@@ -113,38 +113,38 @@
 
 .dark {
   /* Dark mode with rusty accents */
-  --background: rgb(30, 20, 15);
-  --foreground: rgb(245, 235, 220);
-  --card: rgb(40, 28, 20);
-  --card-foreground: rgb(245, 235, 220);
-  --popover: rgb(40, 28, 20);
-  --popover-foreground: rgb(245, 235, 220);
-  --primary: rgb(210, 105, 30); /* Darker orange */
+  --background: rgb(36, 23, 17);
+  --foreground: rgb(243, 231, 220);
+  --card: rgb(43, 28, 20);
+  --card-foreground: rgb(243, 231, 220);
+  --popover: rgb(43, 28, 20);
+  --popover-foreground: rgb(243, 231, 220);
+  --primary: rgb(208, 107, 59); /* Deep rust */
   --primary-foreground: rgb(255, 255, 255);
-  --secondary: rgb(60, 35, 20);
-  --secondary-foreground: rgb(245, 222, 179);
-  --muted: rgb(35, 25, 18);
-  --muted-foreground: rgb(205, 170, 125);
-  --accent: rgb(160, 82, 45); /* Sienna */
+  --secondary: rgb(58, 36, 24);
+  --secondary-foreground: rgb(233, 199, 173);
+  --muted: rgb(46, 31, 23);
+  --muted-foreground: rgb(199, 155, 124);
+  --accent: rgb(177, 88, 49); /* Burnt sienna */
   --accent-foreground: rgb(255, 255, 255);
-  --destructive: rgb(184, 63, 39);
+  --destructive: rgb(180, 74, 56);
   --destructive-foreground: rgb(255, 255, 255);
-  --border: rgb(60, 35, 20);
-  --input: rgb(60, 35, 20);
-  --ring: rgb(210, 105, 30);
-  --chart-1: rgb(210, 105, 30);
-  --chart-2: rgb(205, 133, 63);
-  --chart-3: rgb(183, 65, 14);
-  --chart-4: rgb(160, 82, 45);
-  --chart-5: rgb(139, 69, 19);
-  --sidebar: rgb(30, 20, 15);
-  --sidebar-foreground: rgb(245, 235, 220);
-  --sidebar-primary: rgb(210, 105, 30);
+  --border: rgb(63, 39, 26);
+  --input: rgb(63, 39, 26);
+  --ring: rgb(208, 107, 59);
+  --chart-1: rgb(208, 107, 59);
+  --chart-2: rgb(196, 106, 59);
+  --chart-3: rgb(169, 75, 34);
+  --chart-4: rgb(138, 63, 28);
+  --chart-5: rgb(111, 47, 22);
+  --sidebar: rgb(36, 23, 17);
+  --sidebar-foreground: rgb(243, 231, 220);
+  --sidebar-primary: rgb(208, 107, 59);
   --sidebar-primary-foreground: rgb(255, 255, 255);
-  --sidebar-accent: rgb(160, 82, 45);
+  --sidebar-accent: rgb(177, 88, 49);
   --sidebar-accent-foreground: rgb(255, 255, 255);
-  --sidebar-border: rgb(60, 35, 20);
-  --sidebar-ring: rgb(210, 105, 30);
+  --sidebar-border: rgb(63, 39, 26);
+  --sidebar-ring: rgb(208, 107, 59);
   --font-sans: Montserrat, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Source Code Pro, monospace;
@@ -179,11 +179,11 @@
 /* Rusty gradient utilities */
 @layer utilities {
   .gradient-nature {
-    background: linear-gradient(135deg, rgb(245, 222, 179) 0%, rgb(205, 133, 63) 100%);
+    background: linear-gradient(135deg, rgb(240, 210, 190) 0%, rgb(196, 106, 59) 100%);
   }
-  
+
   .gradient-nature-subtle {
-    background: linear-gradient(180deg, rgb(250, 245, 240) 0%, rgb(245, 235, 220) 100%);
+    background: linear-gradient(180deg, rgb(248, 241, 235) 0%, rgb(242, 227, 215) 100%);
   }
   
   .grain-overlay {

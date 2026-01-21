@@ -13,7 +13,18 @@ import {
   AlertTriangle
 } from 'lucide-react'
 
-const disposalCategories = [
+type DisposalCategory = {
+  title: string
+  items: string[]
+  note: string
+}
+
+type ClimateImpactArea = {
+  title: string
+  detail: string
+}
+
+const disposalCategories: DisposalCategory[] = [
   {
     title: 'Recyclables',
     items: [
@@ -52,7 +63,7 @@ const disposalCategories = [
   }
 ]
 
-const climateImpactAreas = [
+const climateImpactAreas: ClimateImpactArea[] = [
   {
     title: 'Coastal Areas',
     detail: 'Sea-level rise, saltwater intrusion, and stronger storms.'
@@ -71,7 +82,7 @@ const climateImpactAreas = [
   }
 ]
 
-function renderDisposalCard (category) {
+function renderDisposalCard (category: DisposalCategory) {
   return (
     <Card key={category.title} className="border-0 shadow-lg bg-card">
       <CardContent className="p-6 space-y-4">
@@ -92,7 +103,7 @@ function renderDisposalCard (category) {
   )
 }
 
-function renderClimateCard (area) {
+function renderClimateCard (area: ClimateImpactArea) {
   return (
     <Card key={area.title} className="border-0 shadow-lg bg-card">
       <CardContent className="p-6 space-y-3">
