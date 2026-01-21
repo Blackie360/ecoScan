@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 interface GradientBackgroundProps {
   children: React.ReactNode;
   className?: string;
-  variant?: "nature" | "subtle";
+  variant?: "rusty" | "subtle";
 }
 
 export function GradientBackground({
@@ -14,7 +14,7 @@ export function GradientBackground({
   return (
     <div
       className={cn(
-        variant === "nature" ? "gradient-nature" : "gradient-nature-subtle",
+        variant === "rusty" ? "gradient-nature" : "gradient-nature-subtle",
         className
       )}
     >
@@ -22,4 +22,7 @@ export function GradientBackground({
     </div>
   );
 }
+
+
+
 

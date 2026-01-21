@@ -1,61 +1,57 @@
-import { streamText, convertToModelMessages, stepCountIs } from "ai";
+import { streamText, convertToModelMessages } from "ai";
 import { createGateway } from "@ai-sdk/gateway";
-import { weatherTool } from "@/lib/tools/weather";
-import { locationTool } from "@/lib/tools/location";
 
-// Edge Runtime: ~30 seconds default, but streaming can continue longer
-// For longer processing time, switch to Node.js runtime and use maxDuration
-export const runtime = "edge";
+// Use Node.js runtime for longer processing time with image analysis
+export const runtime = "nodejs";
+export const maxDuration = 60; // 60 seconds for image analysis
 
-// Note: maxDuration is only available for Node.js runtime
-// If you need longer timeouts, switch to: export const runtime = "nodejs";
-// Then add: export const maxDuration = 300; // 5 minutes max
+const SYSTEM_PROMPT = `You are EcoScan, an AI assistant that helps people in Kenya properly dispose of waste items by analyzing images.
 
-const SYSTEM_PROMPT = `You are an outdoor guide AI called EcoScan.
-You recommend nearby green spaces, parks, walking paths, and hiking trails based on user mood, time, fitness level, transport, and current weather.
+Your role:
+- Analyze uploaded images to identify waste items and materials
+- Provide Kenya-specific disposal recommendations
+- Consider local regulations, facilities, and environmental impact
+- Be practical, clear, and helpful
 
-IMPORTANT WORKFLOW:
-1. First, use the weather tool to get current conditions
-2. Then, use the location tool for EACH place you recommend to get real photos and Google Maps links
-3. Finally, provide your recommendations with the real data
+When analyzing an image, identify:
+1. What the item is (be specific)
+2. What materials it's made of
+3. The waste category (Plastic, Electronic, Organic, Hazardous, General Waste, etc.)
+4. The best disposal method for Kenya
+5. Step-by-step disposal instructions
+6. Whether recycling is available
+7. Any hazards or safety concerns
+8. Kenya-specific information (locations, regulations, facilities)
 
-When providing recommendations, ALWAYS respond with a brief friendly intro followed by JSON in this EXACT format:
+ALWAYS respond with a brief friendly intro followed by JSON in this EXACT format:
 
 \`\`\`json
 {
-  "recommendations": [
-    {
-      "name": "Place Name",
-      "type": "Park/Trail/Forest/Garden",
-      "distance": "X km from city center",
-      "why": "Why this place is perfect for the user's needs",
-      "best_time": "Best time to visit",
-      "duration": "Suggested visit duration",
-      "difficulty": "Easy/Moderate/Challenging",
-      "mapsUrl": "Google Maps URL from location tool",
-      "photoUrl": "Real photo URL from location tool",
-      "address": "Full address from location tool",
-      "rating": 4.5,
-      "weather": {
-        "condition": "Current weather",
-        "temperature": "Temperature",
-        "advice": "Weather-specific advice"
-      },
-      "transport": ["How to get there option 1", "Option 2"],
-      "what_to_carry": ["Item 1", "Item 2"],
-      "safety_notes": ["Safety tip 1", "Safety tip 2"]
-    }
-  ]
+  "item": "Description of the item",
+  "material": "Primary material(s)",
+  "category": "Waste category",
+  "disposal_method": "Recommended method (Recycle/Compost/Landfill/Special Collection/Reuse)",
+  "disposal_steps": [
+    "Step 1: ...",
+    "Step 2: ...",
+    "Step 3: ..."
+  ],
+  "recycling_available": true/false,
+  "hazards": ["Hazard 1", "Hazard 2"] or null,
+  "local_notes": "Kenya-specific information, locations, or regulations",
+  "location_info": "Specific disposal locations or facilities in Kenya",
+  "environmental_impact": "Brief note on environmental impact"
 }
 \`\`\`
 
 Rules:
-- Focus on real places in Kenya
-- Provide 2-4 recommendations
-- ALWAYS use the location tool to get real mapsUrl and photoUrl for each place
-- Include practical, actionable advice
-- Be calm, friendly, and helpful
-- NEVER use "parks" key, ALWAYS use "recommendations" key`;
+- Focus on Kenya-specific disposal options and regulations
+- Be practical and actionable
+- Include specific locations or facilities when relevant
+- Consider environmental impact
+- Mention any recycling programs available in Kenya
+- If the item can be reused or repurposed, mention that
+- Be friendly and encouraging about proper waste disposal`;
 
 export async function POST(req: Request) {
   try {
@@ -72,10 +68,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verify AI Gateway API key is configured
-    const apiKey = process.env.VERCEL_AI_GATEWAY_API_KEY || process.env.AI_GATEWAY_API_KEY;
+    // Use AI Gateway API key (from .env lines 6-7)
+    const gatewayApiKey = process.env.VERCEL_AI_GATEWAY_API_KEY || process.env.AI_GATEWAY_API_KEY;
     
-    if (!apiKey) {
+    if (!gatewayApiKey) {
       return new Response(
         JSON.stringify({ error: "Vercel AI Gateway API key not configured" }),
         {
@@ -85,28 +81,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create gateway provider instance with explicit API key configuration
-    // This ensures we use API key authentication instead of OIDC token
+    // Create gateway provider instance
     const gateway = createGateway({
-      apiKey: apiKey,
+      apiKey: gatewayApiKey,
       baseURL: "https://ai-gateway.vercel.sh/v1/ai",
     });
 
-    // Convert UI messages to model messages
+    // Convert UI messages to model messages (handles multimodal content including images)
     const modelMessages = await convertToModelMessages(messages);
 
-    // Use gateway provider with explicit API key configuration
-    // stopWhen: stepCountIs(5) allows multi-step agent behavior
-    // The agent will continue generating after tool calls until 5 steps or final response
+    // Use vision-capable model for image analysis via Gateway
     const result = streamText({
-      model: gateway("openai/gpt-4o-mini"), // Use gateway provider with model string
+      model: gateway("openai/gpt-4o-mini"),
       system: SYSTEM_PROMPT,
       messages: modelMessages,
-      tools: {
-        weather: weatherTool,
-        location: locationTool,
-      },
-      stopWhen: stepCountIs(10), // Allow up to 10 steps for weather + multiple location lookups
     });
 
     return result.toUIMessageStreamResponse();
@@ -124,4 +112,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

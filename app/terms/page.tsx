@@ -103,7 +103,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-semibold mb-3">Contact Information</h2>
               <p className="text-muted-foreground leading-relaxed">
                 If you have any questions about these Terms of Service, please contact us at{" "}
-                <a href="/contact" className="text-primary hover:underline">our contact page</a>.
+                <Link href="/contact" className="text-primary hover:underline">our contact page</Link>.
               </p>
             </section>
           </div>

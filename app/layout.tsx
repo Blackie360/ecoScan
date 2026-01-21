@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "EcoScan - Discover Your Perfect Green Space",
-  description: "AI-powered recommendations to help you find nearby parks, nature walks, and hiking trails. Get personalized suggestions based on your mood and available time.",
+  title: "EcoScan - Smart Disposal Guide for Kenya",
+  description: "AI-powered disposal recommendations for Kenya. Take a photo or upload an image to get instant guidance on how to properly dispose of any item. Make sustainable choices with confidence.",
 };
 
 export default function RootLayout({
